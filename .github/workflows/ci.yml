@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  build-test-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Compile (main + tests)
+        run: ./mvnw -B test-compile
+
+      - name: Install Playwright browsers (+ system deps)
+        run: >
+          ./mvnw -B exec:java -Dexec.classpathScope=test
+          -Dexec.mainClass=com.microsoft.playwright.CLI
+          -Dexec.args="install --with-deps chromium"
+
+      - name: Run tests
+        run: ./mvnw -B test
+
+      - name: Generate Allure report
+        if: always()
+        run: ./mvnw -B allure:report
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: target/site/allure-maven-plugin

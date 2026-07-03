@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Cloud Storage — Sign in</title>
+    <style>
+        :root { --accent:#e36b2c; --accent2:#0e7a86; --ink:#1d1a14; --muted:#5f5346; }
+        * { box-sizing: border-box; }
+        body {
+            margin:0; min-height:100vh; font-family: system-ui, sans-serif; color:var(--ink);
+            background: linear-gradient(140deg,#f7f3eb,#f0e7d8);
+            display:grid; place-items:center;
+        }
+        .card {
+            width:min(420px,92vw); background:#fff; border-radius:18px; padding:2rem;
+            box-shadow:0 14px 40px rgba(31,20,10,.14);
+        }
+        h1 { font-size:1.5rem; margin:0 0 .25rem; }
+        p.sub { margin:0 0 1.5rem; color:var(--muted); }
+        .tabs { display:flex; gap:.5rem; margin-bottom:1rem; }
+        .tab {
+            flex:1; text-align:center; padding:.55rem; border-radius:10px; cursor:pointer;
+            border:1px solid #e3dccd; background:#f6f1e7; font-weight:600;
+        }
+        .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+        form { display:none; flex-direction:column; gap:.7rem; }
+        form.active { display:flex; }
+        label { font-size:.85rem; color:var(--muted); }
+        input {
+            width:100%; padding:.6rem .7rem; border:1px solid #ddd4c8; border-radius:10px; font-size:1rem;
+        }
+        button {
+            margin-top:.4rem; padding:.7rem; border:none; border-radius:10px; background:var(--accent2);
+            color:#fff; font-weight:700; font-size:1rem; cursor:pointer;
+        }
+        .error {
+            background:#fde8e0; color:#a8431a; padding:.6rem .8rem; border-radius:10px;
+            margin-bottom:1rem; font-size:.9rem;
+        }
+        .hint { color:var(--muted); font-size:.8rem; margin-top:1rem; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Private Cloud Storage</h1>
+    <p class="sub">Your own files &amp; folders — 50&nbsp;MB free on sign-up.</p>
+
+    <div th:if="${error}" class="error" data-testid="error" th:text="${error}">error</div>
+
+    <div class="tabs">
+        <div class="tab active" id="tab-login" onclick="show('login')">Sign in</div>
+        <div class="tab" id="tab-register" onclick="show('register')">Register</div>
+    </div>
+
+    <form class="active" id="form-login" method="post" th:action="@{/login}">
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" required data-testid="login-email">
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" required data-testid="login-password">
+        <button type="submit" data-testid="login-submit">Sign in</button>
+    </form>
+
+    <form id="form-register" method="post" th:action="@{/register}">
+        <label for="reg-email">Email</label>
+        <input id="reg-email" name="email" type="email" required data-testid="register-email">
+        <label for="reg-password">Password</label>
+        <input id="reg-password" name="password" type="password" required data-testid="register-password">
+        <button type="submit" data-testid="register-submit">Create account</button>
+    </form>
+
+    <p class="hint">New here? Pick <strong>Register</strong> — you'll get 50&nbsp;MB instantly.</p>
+</div>
+
+<script>
+    function show(which) {
+        document.getElementById('form-login').classList.toggle('active', which === 'login');
+        document.getElementById('form-register').classList.toggle('active', which === 'register');
+        document.getElementById('tab-login').classList.toggle('active', which === 'login');
+        document.getElementById('tab-register').classList.toggle('active', which === 'register');
+    }
+</script>
+</body>
+</html>

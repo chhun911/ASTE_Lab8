@@ -1,0 +1,18 @@
+# Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Allure raw results (keep the generated report under target/ instead)
+.allure/
+allure-results/
