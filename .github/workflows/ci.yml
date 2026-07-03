@@ -7,7 +7,10 @@ on:
 
 jobs:
   build-test-report:
-    runs-on: ubuntu-latest
+    # Pinned to 22.04 (jammy): Playwright 1.44's `install --with-deps` requests
+    # the `libasound2` package, which was renamed to `libasound2t64` on Ubuntu
+    # 24.04 (noble = current ubuntu-latest), so the browser install fails there.
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
